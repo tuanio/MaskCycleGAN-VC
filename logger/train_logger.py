@@ -56,14 +56,17 @@ class BaseLogger(object):
 
         # log_dir, is the directory for tensorboard logs: hpylori/logs/
         log_dir = os.path.join(
-            args.save_dir, 'logs', args.name + '_' + datetime.now().strftime('%y%m%d_%H%M%S'))
+            args.save_dir,
+            "logs",
+            args.name + "_" + datetime.now().strftime("%y%m%d_%H%M%S"),
+        )
         self.summary_writer = SummaryWriter(log_dir=log_dir)
         self.log_path = os.path.join(
-            self.save_dir, args.name, '{}.log'.format(args.name))
+            self.save_dir, args.name, "{}.log".format(args.name)
+        )
         self.epoch = args.start_epoch
         self.iter = 0
-        self.global_step = round_down(
-            (self.epoch - 1) * dataset_len, args.batch_size)
+        self.global_step = round_down((self.epoch - 1) * dataset_len, args.batch_size)
 
     def log_text(self, text_dict):
         """
@@ -83,9 +86,9 @@ class BaseLogger(object):
         """
         for k, v in scalar_dict.items():
             if print_to_stdout:
-                self.write('[{}: {}]'.format(k, v))
+                self.write("[{}: {}]".format(k, v))
             # Group in TensorBoard by split. eg. (D_A, D_B) are grouped, (G_A, G_B) are grouped
-            k = k.replace('_', '/')
+            k = k.replace("_", "/")
             self.summary_writer.add_scalar(k, v, self.global_step)
 
     def write(self, message, print_to_stdout=True):
@@ -95,8 +98,8 @@ class BaseLogger(object):
             message (str): Message to write to .log (and stdout if applicable)
             print_to_stdout (bool): If True, print message to stdout
         """
-        with open(self.log_path, 'a') as log_file:
-            log_file.write(message + '\n')
+        with open(self.log_path, "a") as log_file:
+            log_file.write(message + "\n")
         if print_to_stdout:
             print(message)
 
@@ -134,9 +137,10 @@ def visualize(images, save_path=None):
     gridded_images = vutils.make_grid(images, padding=2, normalize=True)
     if save_path:
         vutils.save_image(gridded_images, save_path)
-        print(f'Saved images to {save_path}')
+        print(f"Saved images to {save_path}")
 
     return gridded_images
+
 
 class AverageMeter(object):
     """
@@ -227,7 +231,7 @@ class TrainLogger(BaseLogger):
         hparams = {}
         args_dict = vars(args)
         for key in args_dict:
-            hparams.update({'hparams/' + key: args_dict[key]})
+            hparams.update({"hparams/" + key: args_dict[key]})
 
         self.log_text(hparams)
 
@@ -237,9 +241,10 @@ class TrainLogger(BaseLogger):
         Args:
             loss_dict (dict): str to scalar dictionary of losses
         """
-        if not hasattr(self, 'loss_meters'):
-            self.loss_meters = {loss_name: AverageMeter()
-                                for loss_name in loss_dict.keys()}
+        if not hasattr(self, "loss_meters"):
+            self.loss_meters = {
+                loss_name: AverageMeter() for loss_name in loss_dict.keys()
+            }
         for loss_name, meter in self.loss_meters.items():
             meter.update(loss_dict[loss_name], self.batch_size)
 
@@ -247,14 +252,19 @@ class TrainLogger(BaseLogger):
         if self.iter % self.steps_per_print == 0:
             # Write a header for the log entry
             avg_time = (time() - self.iter_start_time) / self.batch_size
-            message = '(epoch: %d, iter: %d, time: %.3f) ' % (
-                self.epoch, self.iter, avg_time)
+            message = "(epoch: %d, iter: %d, time: %.3f) " % (
+                self.epoch,
+                self.iter,
+                avg_time,
+            )
             for loss_name, meter in self.loss_meters.items():
-                message += '%s: %.3f ' % (loss_name, meter.avg)
+                message += "%s: %.3f " % (loss_name, meter.avg)
 
             # Write all errors as scalars to the graph
             self._log_scalars(
-                {loss_name: meter.avg for loss_name, meter in self.loss_meters.items()}, print_to_stdout=False)
+                {loss_name: meter.avg for loss_name, meter in self.loss_meters.items()},
+                print_to_stdout=False,
+            )
 
             for _, meter in self.loss_meters.items():
                 meter.reset()
@@ -269,10 +279,10 @@ class TrainLogger(BaseLogger):
             metrics (dict): str to scalar dictionary containing metrics such as losses to log
         """
         self._log_scalars(metrics)
-        
+
     def log_img(self, img, name):
         self.summary_writer.add_image(name, img, self.global_step)
-        
+
     def log_audio(self, audio, name, sampling_rate):
         self.summary_writer.add_audio(name, audio, self.global_step, sampling_rate)
 
@@ -289,7 +299,7 @@ class TrainLogger(BaseLogger):
         """Log info for start of an epoch."""
         self.epoch_start_time = time()
         self.iter = 0
-        self.write('[start of epoch {}]'.format(self.epoch))
+        self.write("[start of epoch {}]".format(self.epoch))
 
     def end_epoch(self, metrics=None):
         """
@@ -297,8 +307,11 @@ class TrainLogger(BaseLogger):
         Args:
             metrics (dict): str to scalar dictionary of metric values.
         """
-        self.write('[end of epoch {}/{}, epoch time: {:.2g}]'.format(
-            self.epoch, self.num_epochs, time() - self.epoch_start_time))
+        self.write(
+            "[end of epoch {}/{}, epoch time: {:.2g}]".format(
+                self.epoch, self.num_epochs, time() - self.epoch_start_time
+            )
+        )
         if metrics:
             self._log_scalars(metrics)
         self.epoch += 1
@@ -306,7 +319,7 @@ class TrainLogger(BaseLogger):
     def is_finished_training(self):
         """Return True if finished training, otherwise return False."""
         return 0 < self.num_epochs < self.epoch
-    
+
     def visualize_outputs(self, img_dict):
         """
         Visualize predictions and targets in TensorBoard in grid form.
@@ -316,12 +329,11 @@ class TrainLogger(BaseLogger):
             int: Number of examples visualized to TensorBoard.
         """
         imgs = []
-        names = '-'.join(list(img_dict.keys()))
+        names = "-".join(list(img_dict.keys()))
         for name, img in img_dict.items():
             imgs.append(img)
 
-        self.summary_writer.add_image(
-            names, visualize(imgs), self.global_step)
+        self.summary_writer.add_image(names, visualize(imgs), self.global_step)
 
         return len(img_dict)
 
@@ -348,7 +360,7 @@ class WandbLogger(BaseLogger):
         hparams = {}
         args_dict = vars(args)
         for key in args_dict:
-            hparams.update({'hparams/' + key: args_dict[key]})
+            hparams.update({"hparams/" + key: args_dict[key]})
 
         self.log_text(hparams)
 
@@ -358,9 +370,10 @@ class WandbLogger(BaseLogger):
         Args:
             loss_dict (dict): str to scalar dictionary of losses
         """
-        if not hasattr(self, 'loss_meters'):
-            self.loss_meters = {loss_name: AverageMeter()
-                                for loss_name in loss_dict.keys()}
+        if not hasattr(self, "loss_meters"):
+            self.loss_meters = {
+                loss_name: AverageMeter() for loss_name in loss_dict.keys()
+            }
         for loss_name, meter in self.loss_meters.items():
             meter.update(loss_dict[loss_name], self.batch_size)
 
@@ -368,14 +381,19 @@ class WandbLogger(BaseLogger):
         if self.iter % self.steps_per_print == 0:
             # Write a header for the log entry
             avg_time = (time() - self.iter_start_time) / self.batch_size
-            message = '(epoch: %d, iter: %d, time: %.3f) ' % (
-                self.epoch, self.iter, avg_time)
+            message = "(epoch: %d, iter: %d, time: %.3f) " % (
+                self.epoch,
+                self.iter,
+                avg_time,
+            )
             for loss_name, meter in self.loss_meters.items():
-                message += '%s: %.3f ' % (loss_name, meter.avg)
+                message += "%s: %.3f " % (loss_name, meter.avg)
 
             # Write all errors as scalars to the graph
             self._log_scalars(
-                {loss_name: meter.avg for loss_name, meter in self.loss_meters.items()}, print_to_stdout=False)
+                {loss_name: meter.avg for loss_name, meter in self.loss_meters.items()},
+                print_to_stdout=False,
+            )
 
             for _, meter in self.loss_meters.items():
                 meter.reset()
@@ -390,10 +408,10 @@ class WandbLogger(BaseLogger):
             metrics (dict): str to scalar dictionary containing metrics such as losses to log
         """
         self._log_scalars(metrics)
-        
+
     def log_img(self, img, name):
         self.summary_writer.add_image(name, img, self.global_step)
-        
+
     def log_audio(self, audio, name, sampling_rate):
         self.summary_writer.add_audio(name, audio, self.global_step, sampling_rate)
 
@@ -410,7 +428,7 @@ class WandbLogger(BaseLogger):
         """Log info for start of an epoch."""
         self.epoch_start_time = time()
         self.iter = 0
-        self.write('[start of epoch {}]'.format(self.epoch))
+        self.write("[start of epoch {}]".format(self.epoch))
 
     def end_epoch(self, metrics=None):
         """
@@ -418,8 +436,11 @@ class WandbLogger(BaseLogger):
         Args:
             metrics (dict): str to scalar dictionary of metric values.
         """
-        self.write('[end of epoch {}/{}, epoch time: {:.2g}]'.format(
-            self.epoch, self.num_epochs, time() - self.epoch_start_time))
+        self.write(
+            "[end of epoch {}/{}, epoch time: {:.2g}]".format(
+                self.epoch, self.num_epochs, time() - self.epoch_start_time
+            )
+        )
         if metrics:
             self._log_scalars(metrics)
         self.epoch += 1
@@ -427,7 +448,7 @@ class WandbLogger(BaseLogger):
     def is_finished_training(self):
         """Return True if finished training, otherwise return False."""
         return 0 < self.num_epochs < self.epoch
-    
+
     def visualize_outputs(self, img_dict):
         """
         Visualize predictions and targets in TensorBoard in grid form.
@@ -437,12 +458,106 @@ class WandbLogger(BaseLogger):
             int: Number of examples visualized to TensorBoard.
         """
         imgs = []
-        names = '-'.join(list(img_dict.keys()))
+        names = "-".join(list(img_dict.keys()))
         for name, img in img_dict.items():
             imgs.append(img)
 
-        self.summary_writer.add_image(
-            names, visualize(imgs), self.global_step)
+        self.summary_writer.add_image(names, visualize(imgs), self.global_step)
 
         return len(img_dict)
 
+
+class WandbLogger(BaseLogger):
+    def __init__(self, args, dataset_len):
+        super(WandbLogger, self).__init__(args, dataset_len)
+        self.iter_start_time = None
+        self.epoch_start_time = None
+        self.steps_per_print = args.steps_per_print
+        self.num_epochs = args.num_epochs
+        wandb.init(
+            project=args.name,
+            name=args.name + "_" + datetime.now().strftime("%y%m%d_%H%M%S"),
+        )
+
+    def log_hparams(self, args):
+        hparams = {}
+        args_dict = vars(args)
+        for key in args_dict:
+            hparams.update({"hparams/" + key: args_dict[key]})
+
+        wandb.config.update(hparams)
+
+    def log_iter(self, loss_dict={}):
+        if not hasattr(self, "loss_meters"):
+            self.loss_meters = {
+                loss_name: AverageMeter() for loss_name in loss_dict.keys()
+            }
+        for loss_name, meter in self.loss_meters.items():
+            meter.update(loss_dict[loss_name], self.batch_size)
+
+        # Periodically write to the log and Wandb
+        if self.iter % self.steps_per_print == 0:
+            # Write a header for the log entry
+            avg_time = (time() - self.iter_start_time) / self.batch_size
+            message = "(epoch: %d, iter: %d, time: %.3f) " % (
+                self.epoch,
+                self.iter,
+                avg_time,
+            )
+            for loss_name, meter in self.loss_meters.items():
+                message += "%s: %.3f " % (loss_name, meter.avg)
+
+            # Write all errors as scalars to the graph
+            wandb.log(
+                {loss_name: meter.avg for loss_name, meter in self.loss_meters.items()}
+            )
+
+            for _, meter in self.loss_meters.items():
+                meter.reset()
+
+            # write to .log file
+            self.write(message)
+
+    def log_metrics(self, metrics):
+        wandb.log(metrics)
+
+    def log_img(self, img, name):
+        wandb.log({name: [wandb.Image(img)]})
+
+    def log_audio(self, audio, name, sampling_rate):
+        wandb.log({name: [wandb.Audio(audio, sample_rate=sampling_rate)]})
+
+    def start_iter(self):
+        self.iter_start_time = time()
+
+    def end_iter(self):
+        self.iter += self.batch_size
+        self.global_step += self.batch_size
+
+    def start_epoch(self):
+        self.epoch_start_time = time()
+        self.iter = 0
+        self.write("[start of epoch {}]".format(self.epoch))
+
+    def end_epoch(self, metrics=None):
+        self.write(
+            "[end of epoch {}/{}, epoch time: {:.2g}]".format(
+                self.epoch, self.num_epochs, time() - self.epoch_start_time
+            )
+        )
+        if metrics:
+            wandb.log(metrics)
+        self.epoch += 1
+
+    def is_finished_training(self):
+        return 0 < self.num_epochs < self.epoch
+
+    def visualize_outputs(self, img_dict):
+        imgs = []
+        names = "-".join(list(img_dict.keys()))
+        for name, img in img_dict.items():
+            imgs.append(img)
+
+        wandb.log({names: [wandb.Image(visualize(imgs))]})
+
+        return len(img_dict)
