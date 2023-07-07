@@ -90,7 +90,7 @@ class CycleGANTrainArgParser(TrainArgParser):
         self.parser.add_argument(
             "--spectrum_max_mask_len",
             type=int,
-            default=20,
+            default=0,
             help="Maximum length of spectrum mask for Mask-CycleGAN-VC.",
         )
 

@@ -75,10 +75,12 @@ python3.10 -W ignore::UserWarning -m mask_cyclegan_vc.train \
     --max_mask_len 25 \
     --gpu_ids 1
 
-# --- [0, 50] ---
+# --- temporal mask [0, 25] with frequency mask [0, 20]  ---
+
+# --- [0, 25] ---
 
 python3.10 -W ignore::UserWarning -m mask_cyclegan_vc.train \
-    --name mask_cyclegan_vc_VCC2SF3_VCC2TF1 \
+    --name mask_cyclegan_vc_VCC2SF3_VCC2TF1_FreqMask20 \
     --seed 0 \
     --save_dir /data/tuanio/projects/voice-conversion/mask-cycle-gan-vc/experiments/ \
     --preprocessed_data_dir /data/tuanio/data/vcc2018/preprocessed/training \
@@ -92,11 +94,12 @@ python3.10 -W ignore::UserWarning -m mask_cyclegan_vc.train \
     --batch_size 1 \
     --sample_rate 22050 \
     --num_frames 64 \
-    --max_mask_len 50 \
+    --max_mask_len 25 \
+    --spectrum_max_mask_len 20 \
     --gpu_ids 2
 
 python3.10 -W ignore::UserWarning -m mask_cyclegan_vc.train \
-    --name mask_cyclegan_vc_VCC2SM3_VCC2TM1 \
+    --name mask_cyclegan_vc_VCC2SM3_VCC2TM1_FreqMask20 \
     --seed 0 \
     --save_dir /data/tuanio/projects/voice-conversion/mask-cycle-gan-vc/experiments/ \
     --preprocessed_data_dir /data/tuanio/data/vcc2018/preprocessed/training \
@@ -110,11 +113,12 @@ python3.10 -W ignore::UserWarning -m mask_cyclegan_vc.train \
     --batch_size 1 \
     --sample_rate 22050 \
     --num_frames 64 \
-    --max_mask_len 50 \
+    --max_mask_len 25 \
+    --spectrum_max_mask_len 20 \
     --gpu_ids 2
 
 python3.10 -W ignore::UserWarning -m mask_cyclegan_vc.train \
-    --name mask_cyclegan_vc_VCC2SF3_VCC2TM1 \
+    --name mask_cyclegan_vc_VCC2SF3_VCC2TM1_FreqMask20 \
     --seed 0 \
     --save_dir /data/tuanio/projects/voice-conversion/mask-cycle-gan-vc/experiments/ \
     --preprocessed_data_dir /data/tuanio/data/vcc2018/preprocessed/training \
@@ -128,11 +132,12 @@ python3.10 -W ignore::UserWarning -m mask_cyclegan_vc.train \
     --batch_size 1 \
     --sample_rate 22050 \
     --num_frames 64 \
-    --max_mask_len 50 \
+    --max_mask_len 25 \
+    --spectrum_max_mask_len 20 \
     --gpu_ids 3
 
 python3.10 -W ignore::UserWarning -m mask_cyclegan_vc.train \
-    --name mask_cyclegan_vc_VCC2SM3_VCC2TF1 \
+    --name mask_cyclegan_vc_VCC2SM3_VCC2TF1_FreqMask20 \
     --seed 0 \
     --save_dir /data/tuanio/projects/voice-conversion/mask-cycle-gan-vc/experiments/ \
     --preprocessed_data_dir /data/tuanio/data/vcc2018/preprocessed/training \
@@ -146,5 +151,6 @@ python3.10 -W ignore::UserWarning -m mask_cyclegan_vc.train \
     --batch_size 1 \
     --sample_rate 22050 \
     --num_frames 64 \
-    --max_mask_len 50 \
+    --max_mask_len 25 \
+    --spectrum_max_mask_len 20 \
     --gpu_ids 3
