@@ -100,6 +100,7 @@ class MaskCycleGANVCTraining(object):
             datasetB=self.dataset_B,
             n_frames=args.num_frames,
             max_mask_len=args.max_mask_len,
+            spectrum_max_mask_len=args.spectrum_max_mask_len,
         )
         self.train_dataloader = torch.utils.data.DataLoader(
             dataset=self.dataset,
@@ -114,6 +115,7 @@ class MaskCycleGANVCTraining(object):
             datasetB=self.dataset_B,
             n_frames=args.num_frames_validation,
             max_mask_len=args.max_mask_len,
+            spectrum_max_mask_len=args.spectrum_max_mask_len,
             valid=True,
         )
         self.validation_dataloader = torch.utils.data.DataLoader(

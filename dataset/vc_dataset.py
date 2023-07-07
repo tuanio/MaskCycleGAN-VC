@@ -66,7 +66,7 @@ class VCDataset(Dataset):
 
             if self.spectrum_max_mask_len > 0:
                 # spectrum mask
-
+                print("Frequency mask A")
                 spectrum_mask_size_A = np.random.randint(0, self.spectrum_max_mask_len)
                 spectrum_start_A = np.random.randint(
                     0, n_spectrums - spectrum_mask_size_A
@@ -93,6 +93,7 @@ class VCDataset(Dataset):
 
             if self.spectrum_max_mask_len > 0:
                 # spectrum mask
+                print("Frequency mask B")
                 spectrum_mask_size_B = np.random.randint(0, self.spectrum_max_mask_len)
                 spectrum_start_B = np.random.randint(
                     0, n_spectrums - spectrum_mask_size_B
