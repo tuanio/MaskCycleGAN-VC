@@ -10,18 +10,26 @@ import numpy as np
 
 class VCDataset(Dataset):
     def __init__(
-        self, datasetA, datasetB=None, n_frames=64, max_mask_len=25, valid=False
+        self,
+        datasetA,
+        datasetB=None,
+        n_frames=64,
+        max_mask_len=25,
+        spectrum_max_mask_len=25,
+        valid=False,
     ):
         self.datasetA = datasetA
         self.datasetB = datasetB
         self.n_frames = n_frames
         self.valid = valid
         self.max_mask_len = max_mask_len
+        self.spectrum_max_mask_len = spectrum_max_mask_len
 
     def __getitem__(self, index):
         dataset_A = self.datasetA
         dataset_B = self.datasetB
         n_frames = self.n_frames
+        n_spectrums = 80  # n mels
 
         if self.valid:
             if dataset_B is None:  # only return datasetA utterance
@@ -55,6 +63,18 @@ class VCDataset(Dataset):
             mask_start_A = np.random.randint(0, n_frames - mask_size_A)
             mask_A = np.ones_like(data_A[:, start_A:end_A])
             mask_A[:, mask_start_A : mask_start_A + mask_size_A] = 0.0
+
+            if self.spectrum_max_mask_len > 0:
+                # spectrum mask
+
+                spectrum_mask_size_A = np.random.randint(0, self.spectrum_max_mask_len)
+                spectrum_start_A = np.random.randint(
+                    0, n_spectrums - spectrum_mask_size_A
+                )
+                mask_A[
+                    spectrum_start_A : spectrum_start_A + spectrum_mask_size_A, :
+                ] = 0.0
+
             train_data_A.append(data_A[:, start_A:end_A])
             train_mask_A.append(mask_A)
 
@@ -70,6 +90,16 @@ class VCDataset(Dataset):
             mask_B[:, mask_start_B : mask_start_B + mask_size_B] = 0.0
             train_data_B.append(data_B[:, start_B:end_B])
             train_mask_B.append(mask_B)
+
+            if self.spectrum_max_mask_len > 0:
+                # spectrum mask
+                spectrum_mask_size_B = np.random.randint(0, self.spectrum_max_mask_len)
+                spectrum_start_B = np.random.randint(
+                    0, n_spectrums - spectrum_mask_size_B
+                )
+                mask_B[
+                    spectrum_start_B : spectrum_start_B + spectrum_mask_size_B, :
+                ] = 0.0
 
         train_data_A = np.array(train_data_A)
         train_data_B = np.array(train_data_B)

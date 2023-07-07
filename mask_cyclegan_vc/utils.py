@@ -49,8 +49,8 @@ def get_mel_spectrogram_fig(spec, title="Mel-Spectrogram"):
     Returns:
         torch.Tensor: Figure as tensor
     """
-    figure, ax = plt.subplots()
-    canvas = FigureCanvas(figure)
+    fig, ax = plt.subplots()
+    canvas = FigureCanvas(fig)
     S_db = librosa.power_to_db(10 ** spec.numpy().squeeze(), ref=np.max)
     img = librosa.display.specshow(S_db, ax=ax, y_axis="log", x_axis="time")
 
@@ -61,5 +61,5 @@ def get_mel_spectrogram_fig(spec, title="Mel-Spectrogram"):
     image = Image.open(buf)
     image = ToTensor()(image)
 
-    plt.close(figure)
+    plt.close(fig)
     return image

@@ -49,7 +49,6 @@ class BaseArgParser(object):
         self.parser.add_argument(
             "--gpu_ids", type=str, default="0", help="Comma-separated list of GPU IDs."
         )
-
         # Logger Args
         self.parser.add_argument(
             "--steps_per_print",
