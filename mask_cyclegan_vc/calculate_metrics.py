@@ -16,8 +16,8 @@ def main(args):
         project_name = folder.rsplit(os.sep, 1)[-1]
         audios_path = os.path.join(folder, "converted_audio")
         print("Audio path:", audios_path)
-        original_files = sorted(glob.glob(audios_path + "/*_original_*.wav"))
-        converted_files = sorted(glob.glob(audios_path + "/*_converted_*.wav"))
+        original_files = sorted(glob.glob(audios_path + "/*-original_*.wav"))
+        converted_files = sorted(glob.glob(audios_path + "/*-converted_*.wav"))
 
         print(f"Original files: {len(original_files)}, Converted files: {len(converted_files)}")
         mcd_scores = []
