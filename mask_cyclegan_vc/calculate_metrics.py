@@ -27,7 +27,7 @@ def main(args):
             mcd_score = calculate_mcd(orig, conv)
             mcd_scores.append(mcd_score)
             is_freq_mask = 'FreqMask20' in project_name
-            list_mcd_scores.append((mcd_score, is_freq_mask, original_files, converted_files))
+            list_mcd_scores.append((mcd_score, is_freq_mask, orig, conv))
 
         mcd_scores = np.array(mcd_scores)
         m = np.mean(mcd_scores)
