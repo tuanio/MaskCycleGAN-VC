@@ -36,7 +36,7 @@ def main(args):
 
     sorted_list = sorted(list_mcd_scores)
     with open('mcd_score.json', 'w', encoding='utf-8') as f:
-        f.write(sorted_list, indent=2, ensure_ascii=False)
+        json.dump(sorted_list, f, indent=2, ensure_ascii=False)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
