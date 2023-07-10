@@ -24,7 +24,7 @@ def main():
         mcd_scores = np.array(mcd_scores)
         m = np.mean(mcd_scores)
         s = np.std(mcd_scores)
-        print(f"Project: [{project_name}] | [{np.round(m, 2)}] +- [{np.round(s, 2)}]")
+        print(f"Project: [{project_name}] | MCD = [{np.round(m, 2)}] +- [{np.round(s, 2)}]")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
