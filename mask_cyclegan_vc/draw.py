@@ -5,8 +5,8 @@ import argparse
 
 
 def main(args):
-    wav_a, _ = load_audio(args.path_a)
-    wav_b, _ = load_audio(args.path_b)
+    wav_a, _ = torchaudio.load(args.path_a)
+    wav_b, _ = torchaudio.load(args.path_b)
 
     vocoder = torch.hub.load("tuanio/melgan", "load_melgan")
     def cal_mel(wav):
