@@ -33,7 +33,7 @@ class TrainArgParser(BaseArgParser):
         )
 
         self.parser.add_argument(
-            "--max_ckpts", type=int, default=3, help="Max ckpts to save."
+            "--max_ckpts", type=int, default=5, help="Max ckpts to save."
         )
         self.parser.add_argument(
             "--continue_train",
