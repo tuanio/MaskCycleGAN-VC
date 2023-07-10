@@ -37,43 +37,41 @@ class MaskCycleGANVCTesting(object):
         self.vocoder = torch.hub.load("tuanio/melgan", "load_melgan")
         self.sample_rate = args.sample_rate
 
-        if self.model_name == 'generator_A2B':
-            # Initialize speakerA's dataset
-            self.dataset_A = self.loadPickleFile(
-                os.path.join(
-                    args.preprocessed_data_dir,
-                    self.speaker_A_id,
-                    f"{self.speaker_A_id}_normalized.pickle",
-                )
+        # Initialize speakerA's dataset
+        self.dataset_A = self.loadPickleFile(
+            os.path.join(
+                args.preprocessed_data_dir,
+                self.speaker_A_id,
+                f"{self.speaker_A_id}_normalized.pickle",
             )
-            dataset_A_norm_stats = np.load(
-                os.path.join(
-                    args.preprocessed_data_dir,
-                    self.speaker_A_id,
-                    f"{self.speaker_A_id}_norm_stat.npz",
-                )
+        )
+        dataset_A_norm_stats = np.load(
+            os.path.join(
+                args.preprocessed_data_dir,
+                self.speaker_A_id,
+                f"{self.speaker_A_id}_norm_stat.npz",
             )
-            self.dataset_A_mean = dataset_A_norm_stats["mean"]
-            self.dataset_A_std = dataset_A_norm_stats["std"]
+        )
+        self.dataset_A_mean = dataset_A_norm_stats["mean"]
+        self.dataset_A_std = dataset_A_norm_stats["std"]
 
-        else:
-            # Initialize speakerB's dataset
-            self.dataset_B = self.loadPickleFile(
-                os.path.join(
-                    args.preprocessed_data_dir,
-                    self.speaker_B_id,
-                    f"{self.speaker_B_id}_normalized.pickle",
-                )
+        # Initialize speakerB's dataset
+        self.dataset_B = self.loadPickleFile(
+            os.path.join(
+                args.preprocessed_data_dir,
+                self.speaker_B_id,
+                f"{self.speaker_B_id}_normalized.pickle",
             )
-            dataset_B_norm_stats = np.load(
-                os.path.join(
-                    args.preprocessed_data_dir,
-                    self.speaker_B_id,
-                    f"{self.speaker_B_id}_norm_stat.npz",
-                )
+        )
+        dataset_B_norm_stats = np.load(
+            os.path.join(
+                args.preprocessed_data_dir,
+                self.speaker_B_id,
+                f"{self.speaker_B_id}_norm_stat.npz",
             )
-            self.dataset_B_mean = dataset_B_norm_stats["mean"]
-            self.dataset_B_std = dataset_B_norm_stats["std"]
+        )
+        self.dataset_B_mean = dataset_B_norm_stats["mean"]
+        self.dataset_B_std = dataset_B_norm_stats["std"]
 
         source_dataset = (
             self.dataset_A if self.model_name == "generator_A2B" else self.dataset_B
