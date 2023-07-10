@@ -19,7 +19,7 @@ def main(args):
         original_files = sorted(glob.glob(audios_path + "/*-original_*.wav"))
         converted_files = sorted(glob.glob(audios_path + "/*-converted_*.wav"))
 
-        print(f"Original files: {len(original_files)}, Converted files: {len(converted_files)}")
+        # print(f"Original files: {len(original_files)}, Converted files: {len(converted_files)}")
         mcd_scores = []
         for orig, conv in tqdm(zip(original_files, converted_files), total=len(original_files)):
             mcd_score = calculate_mcd(orig, conv)

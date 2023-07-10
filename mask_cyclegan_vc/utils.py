@@ -87,7 +87,7 @@ def new_wav2mcep_numpy(self, loaded_wav, alpha=0.65, fft_size=1024):
     return mcep
 
 
-def get_mcd_calculator(mcd_mode="dtw_sl"):
+def get_mcd_calculator(mcd_mode="plain"):
     mcd_toolbox = Calculate_MCD(MCD_mode=mcd_mode)
     mcd_toolbox.wav2mcep_numpy = new_wav2mcep_numpy.__get__(mcd_toolbox, Calculate_MCD)
     return lambda path_a, path_b: mcd_toolbox.calculate_mcd(path_a, path_b)
