@@ -1,7 +1,7 @@
 import argparse
 from args.base_arg_parser import BaseArgParser
 from pymcd.mcd import Calculate_MCD
-from utils import get_mcd_calculator
+from mask_cyclegan_vc.utils import get_mcd_calculator
 from tqdm.auto import tqdm
 import glob
 
