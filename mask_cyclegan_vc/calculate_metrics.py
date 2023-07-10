@@ -15,6 +15,7 @@ def main(args):
     for folder in glob.glob(project_audio_path + "/*"):
         project_name = folder.rsplit(os.sep, 1)[-1]
         audios_path = os.path.join(folder, "converted_audio")
+        print("Audio path:", audios_path)
         original_files = sorted(glob.glob(audios_path + "/*_original_*.wav"))
         converted_files = sorted(glob.glob(audios_path + "/*_converted_*.wav"))
 
