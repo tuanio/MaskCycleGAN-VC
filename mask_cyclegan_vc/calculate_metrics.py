@@ -6,7 +6,7 @@ from tqdm.auto import tqdm
 import glob
 
 
-def main():
+def main(args):
     calculate_mcd = get_mcd_calculator()
 
     project_audio_path = args.project_audio_path
