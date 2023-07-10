@@ -6,7 +6,7 @@ python3.10 -m mask_cyclegan_vc.test \
     --speaker_A_id VCC2SF3 \
     --speaker_B_id VCC2TF1 \
     --ckpt_dir /data/tuanio/projects/voice-conversion/mask-cycle-gan-vc/experiments/mask_cyclegan_vc_VCC2SF3_VCC2TF1/ckpts \
-    --load_epoch 500 \
+    --load_epoch 3000 \
     --model_name generator_A2B
 
 python3.10 -m mask_cyclegan_vc.test \

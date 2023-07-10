@@ -34,3 +34,6 @@ webencodings
 widgetsnbextension
 scikit-build
 librosa
+pymcd
+pyworld
+pysptk

@@ -13,6 +13,10 @@ import torch.nn as nn
 import torchaudio
 from torchvision.transforms import ToTensor
 
+from pymcd.mcd import Calculate_MCD
+import pyworld
+import pysptk
+
 import librosa
 import librosa.display
 
@@ -63,3 +67,20 @@ def get_mel_spectrogram_fig(spec, title="Mel-Spectrogram"):
 
     plt.close(fig)
     return image
+
+
+
+def new_wav2mcep_numpy(self, loaded_wav, alpha=0.65, fft_size=2048):
+
+    # Use WORLD vocoder to spectral envelope
+    _, sp, _ = pyworld.wav2world(loaded_wav.astype(np.double), fs=self.SAMPLING_RATE,
+                                    frame_period=self.FRAME_PERIOD, fft_size=fft_size)
+
+    # Extract MCEP features
+    mcep = pysptk.sptk.mcep(sp, order=35, alpha=alpha, maxiter=0,
+                            etype=1, eps=1.0E-8, min_det=0.0, itype=3)
+
+    return mcep
+
+def get_new_wav2mcep(instance):
+    return new_wav2mcep_numpy.__get__(instance, Calculate_MCD)

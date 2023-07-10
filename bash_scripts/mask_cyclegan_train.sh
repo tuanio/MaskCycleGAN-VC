@@ -154,3 +154,7 @@ python3.10 -W ignore::UserWarning -m mask_cyclegan_vc.train \
     --max_mask_len 25 \
     --spectrum_max_mask_len 20 \
     --gpu_ids 3
+
+---
+
+continue the first one on ckpt 3000
