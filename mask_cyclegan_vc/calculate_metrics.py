@@ -1,10 +1,11 @@
-import argparse
 import os
+import glob
+import argparse
+import numpy as np
+from tqdm.auto import tqdm
 from args.base_arg_parser import BaseArgParser
 from pymcd.mcd import Calculate_MCD
 from mask_cyclegan_vc.utils import get_mcd_calculator
-from tqdm.auto import tqdm
-import glob
 
 
 def main(args):
