@@ -19,7 +19,8 @@ python3.10 -W ignore::UserWarning -m mask_cyclegan_vc.train \
     --sample_rate 22050 \
     --num_frames 64 \
     --max_mask_len 25 \
-    --gpu_ids 0
+    --gpu_ids 0 \
+    --continue_train
 
 python3.10 -W ignore::UserWarning -m mask_cyclegan_vc.train \
     --name mask_cyclegan_vc_VCC2SM3_VCC2TM1 \

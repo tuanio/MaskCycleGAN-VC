@@ -69,18 +69,25 @@ def get_mel_spectrogram_fig(spec, title="Mel-Spectrogram"):
     return image
 
 
-
-def new_wav2mcep_numpy(self, loaded_wav, alpha=0.65, fft_size=2048):
+def new_wav2mcep_numpy(self, loaded_wav, alpha=0.65, fft_size=1024):
 
     # Use WORLD vocoder to spectral envelope
-    _, sp, _ = pyworld.wav2world(loaded_wav.astype(np.double), fs=self.SAMPLING_RATE,
-                                    frame_period=self.FRAME_PERIOD, fft_size=fft_size)
+    _, sp, _ = pyworld.wav2world(
+        loaded_wav.astype(np.double),
+        fs=self.SAMPLING_RATE,
+        frame_period=self.FRAME_PERIOD,
+        fft_size=fft_size,
+    )
 
     # Extract MCEP features
-    mcep = pysptk.sptk.mcep(sp, order=35, alpha=alpha, maxiter=0,
-                            etype=1, eps=1.0E-8, min_det=0.0, itype=3)
+    mcep = pysptk.sptk.mcep(
+        sp, order=35, alpha=alpha, maxiter=0, etype=1, eps=1.0e-8, min_det=0.0, itype=3
+    )
 
     return mcep
 
-def get_new_wav2mcep(instance):
-    return new_wav2mcep_numpy.__get__(instance, Calculate_MCD)
+
+def get_mcd_calculator(mcd_mode="dtw_sl"):
+    mcd_toolbox = Calculate_MCD(MCD_mode=mcd_mode)
+    mcd_toolbox.wav2mcep_numpy = new_wav2mcep_numpy.__get__(mcd_toolbox, Calculate_MCD)
+    return lambda path_a, path_b: mcd_toolbox.calculate_mcd(path_a, path_b)
