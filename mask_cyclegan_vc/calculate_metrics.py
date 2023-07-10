@@ -13,11 +13,11 @@ def main():
     for folder in glob.glob(project_audio_path + "/*"):
         project_name = folder.rsplit(os.sep, 1)[-1]
         audios_path = os.path.join(folder, "converted_audio")
-        original_files = sorted(glob.glob("*_original_*.wav"))
-        converted_files = sorted(glob.glob("*_converted_*.wav"))
+        original_files = sorted(glob.glob(audios_path + "/*_original_*.wav"))
+        converted_files = sorted(glob.glob(audios_path + "/*_converted_*.wav"))
 
         mcd_scores = []
-        for orig, conv in zip(original_files, converted_files):
+        for orig, conv in tqdm(zip(original_files, converted_files), total=len(original_files)):
             mcd_score = calculate_mcd(orig, conv)
             mcd_scores.append(mcd_score)
 
