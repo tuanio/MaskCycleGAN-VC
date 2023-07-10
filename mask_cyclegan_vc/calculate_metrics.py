@@ -1,5 +1,6 @@
 import os
 import glob
+import json
 import argparse
 import numpy as np
 from tqdm.auto import tqdm
@@ -11,6 +12,7 @@ from mask_cyclegan_vc.utils import get_mcd_calculator
 def main(args):
     calculate_mcd = get_mcd_calculator()
 
+    list_mcd_scores = []
     project_audio_path = args.project_audio_path
     for folder in glob.glob(project_audio_path + "/*"):
         project_name = folder.rsplit(os.sep, 1)[-1]
@@ -24,11 +26,17 @@ def main(args):
         for orig, conv in tqdm(zip(original_files, converted_files), total=len(original_files)):
             mcd_score = calculate_mcd(orig, conv)
             mcd_scores.append(mcd_score)
+            is_freq_mask = 'FreqMask20' in project_name
+            list_mcd_scores.append((mcd_score, is_freq_mask, original_files, converted_files))
 
         mcd_scores = np.array(mcd_scores)
         m = np.mean(mcd_scores)
         s = np.std(mcd_scores)
         print(f"Project: [{project_name}] | MCD = [{np.round(m, 2)}] +- [{np.round(s, 2)}]")
+
+    sorted_list = sorted(list_mcd_scores)
+    with open('mcd_score.json', 'w', encoding='utf-8') as f:
+        f.write(sorted_list, indent=2, ensure_ascii=False)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
