@@ -70,21 +70,21 @@ rm -rf vcc2018/vcc2018_reference
 
 To expedite training, we preprocess the dataset by converting waveforms to melspectograms, then save the spectrograms as pickle files `<speaker_id>normalized.pickle` and normalization statistics (mean, std) as npz files `<speaker_id>_norm_stats.npz`. We convert waveforms to spectrograms using a [melgan vocoder](https://github.com/descriptinc/melgan-neurips) to ensure that you can decode voice converted spectrograms to waveform and listen to your samples during inference.
 
-```
+```bash
 python data_preprocessing/preprocess_vcc2018.py \
   --data_directory vcc2018/vcc2018_training \
   --preprocessed_data_directory vcc2018_preprocessed/vcc2018_training \
   --speaker_ids VCC2SF1 VCC2SF2 VCC2SF3 VCC2SF4 VCC2SM1 VCC2SM2 VCC2SM3 VCC2SM4 VCC2TF1 VCC2TF2 VCC2TM1 VCC2TM2
 ```
 
-```
+```bash
 python data_preprocessing/preprocess_vcc2018.py \
   --data_directory vcc2018/vcc2018_evaluation \
   --preprocessed_data_directory vcc2018_preprocessed/vcc2018_evaluation \
   --speaker_ids VCC2SF1 VCC2SF2 VCC2SF3 VCC2SF4 VCC2SM1 VCC2SM2 VCC2SM3 VCC2SM4 VCC2TF1 VCC2TF2 VCC2TM1 VCC2TM2
 ```
 
-```
+```bash
 python3 data_preprocessing/preprocess_vcc2018.py \
   --data_directory /data/tuanio/data/vcc2018/vcc2018_training \
   --preprocessed_data_directory /data/tuanio/data/vcc2018/preprocessed/training \
@@ -99,6 +99,30 @@ python3 data_preprocessing/preprocess_vcc2018.py \
   --data_directory /data/tuanio/data/vcc2018/vcc2018_reference \
   --preprocessed_data_directory /data/tuanio/data/vcc2018/preprocessed/reference \
   --speaker_ids VCC2TF1  VCC2TF2  VCC2TM1  VCC2TM2
+```
+
+## Draw
+
+```bash
+python3.10 -m mask_cyclegan_vc.draw \
+  --path-a /data/tuanio/projects/voice-conversion/mask-cycle-gan-vc/experiments/evaluation/mask_cyclegan_vc_VCC2SF3_VCC2TF1/converted_audio/30-original_VCC2SF3_to_VCC2TF1.wav \
+  --path-b /data/tuanio/projects/voice-conversion/mask-cycle-gan-vc/experiments/evaluation/mask_cyclegan_vc_VCC2SF3_VCC2TF1/converted_audio/30-converted_VCC2SF3_to_VCC2TF1.wav \
+  --name origin_best
+
+python3.10 -m mask_cyclegan_vc.draw \
+  --path-a /data/tuanio/projects/voice-conversion/mask-cycle-gan-vc/experiments/evaluation/mask_cyclegan_vc_VCC2SF3_VCC2TF1_FreqMask20/converted_audio/30-original_VCC2SF3_to_VCC2TF1.wav \
+  --path-b /data/tuanio/projects/voice-conversion/mask-cycle-gan-vc/experiments/evaluation/mask_cyclegan_vc_VCC2SF3_VCC2TF1_FreqMask20/converted_audio/30-converted_VCC2SF3_to_VCC2TF1.wav \
+  --name freq_best
+
+python3.10 -m mask_cyclegan_vc.draw \
+  --path-a /data/tuanio/projects/voice-conversion/mask-cycle-gan-vc/experiments/evaluation/mask_cyclegan_vc_VCC2SM3_VCC2TF1/converted_audio/12-original_VCC2SM3_to_VCC2TF1.wav \
+  --path-b /data/tuanio/projects/voice-conversion/mask-cycle-gan-vc/experiments/evaluation/mask_cyclegan_vc_VCC2SM3_VCC2TF1/converted_audio/12-converted_VCC2SM3_to_VCC2TF1.wav \
+  --name origin_worst
+
+python3.10 -m mask_cyclegan_vc.draw \
+  --path-a /data/tuanio/projects/voice-conversion/mask-cycle-gan-vc/experiments/evaluation/mask_cyclegan_vc_VCC2SM3_VCC2TF1_FreqMask20/converted_audio/26-original_VCC2SM3_to_VCC2TF1.wav \
+  --path-b /data/tuanio/projects/voice-conversion/mask-cycle-gan-vc/experiments/evaluation/mask_cyclegan_vc_VCC2SM3_VCC2TF1_FreqMask20/converted_audio/26-converted_VCC2SM3_to_VCC2TF1.wav \
+  --name freq_worst
 ```
 
 ## Training
